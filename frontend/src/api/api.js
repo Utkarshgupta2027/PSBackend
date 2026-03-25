@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'https://payment-system-5g9p.vercel.app';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -17,8 +17,13 @@ api.interceptors.request.use((config) => {
 });
 
 // ── User ─────────────────────────────────────────────
-export const registerUser = (data) => api.post('/user/register', data);
-export const loginUser    = (data) => api.post('/user/login', data);
+export const registerUser   = (data) => api.post('/user/register', data);
+export const loginUser      = (data) => api.post('/user/login', data);
+
+// ── OTP / Mobile Auth ────────────────────────────────
+export const sendOtp        = (phoneNumber) => api.post('/otp/send', { phoneNumber });
+export const registerWithOtp = (data) => api.post('/otp/register', data);
+export const loginWithOtp   = (data) => api.post('/otp/login', data);
 
 // ── Wallet ────────────────────────────────────────────
 export const addMoney = (data) => api.post('/wallet/addMoney', data);

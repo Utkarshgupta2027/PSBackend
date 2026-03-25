@@ -20,6 +20,9 @@ public class User {
     @Column(name = "account_age_days", columnDefinition = "INT DEFAULT 0")
     private int accountAgeDays = 0;
 
+    @Column(name = "phone_number", unique = true)
+    private String phoneNumber;
+
     // GETTERS
 
     public Long getId() {
@@ -71,4 +74,7 @@ public class User {
     public void setAccountAgeDays(int accountAgeDays) {
         this.accountAgeDays = accountAgeDays;
     }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 }
