@@ -1,5 +1,11 @@
-FROM eclipse-temurin:17-jdk
+# Use Java base image
+FROM eclipse-temurin:17-jdk-alpine
+
+# Set working directory
 WORKDIR /app
-COPY . .
-RUN ./mvnw clean package 
-CMD java -jar target/*.jar
+
+# Copy jar file
+COPY target/*.jar app.jar
+
+# Run application
+ENTRYPOINT ["java","-jar","app.jar"]
