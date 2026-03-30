@@ -1,13 +1,19 @@
-# Root gitignore
+# IDE files
 .DS_Store
 Thumbs.db
 *.log
+.idea/
+.vscode/
 
-# Frontend
+# Java build output
+demo/target/
+*.class
+*.jar
+
+# Frontend dependencies (Vercel/CI will run npm install)
 frontend/node_modules/
+
+# Local env files (never commit secrets)
 frontend/.env.local
 frontend/.env.production
 frontend/.env.development
-
-# Don't ignore dist — Railway/Vercel will rebuild it
-# frontend/dist/
