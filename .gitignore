@@ -1,0 +1,13 @@
+# Root gitignore
+.DS_Store
+Thumbs.db
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/.env.local
+frontend/.env.production
+frontend/.env.development
+
+# Don't ignore dist — Railway/Vercel will rebuild it
+# frontend/dist/

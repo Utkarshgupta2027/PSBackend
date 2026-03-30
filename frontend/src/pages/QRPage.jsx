@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useOutletContext, useNavigate } from 'react-router-dom'
-
-const API = 'http://localhost:8080'
+import { apiUrl } from '../api.js'
 
 export default function QRPage() {
   const { user } = useAuth()
@@ -21,7 +20,7 @@ export default function QRPage() {
   // Load my QR code
   useEffect(() => {
     if (user?.id) {
-      setMyQrUrl(`${API}/qr/generate/${user.id}?t=${Date.now()}`)
+      setMyQrUrl(apiUrl(`/qr/generate/${user.id}?t=${Date.now()}`))
     }
   }, [user?.id])
 

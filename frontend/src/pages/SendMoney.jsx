@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useOutletContext, useNavigate } from 'react-router-dom'
-
-const API = 'http://localhost:8080'
+import { apiUrl } from '../api.js'
 
 function fmtCurrency(n) {
   return '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2 })
@@ -30,7 +29,7 @@ export default function SendMoney() {
     setLoading(true)
     try {
       const res = await fetch(
-        `${API}/transaction/send?senderId=${user.id}&receiverId=${form.receiverId}&amount=${form.amount}`,
+        apiUrl(`/transaction/send?senderId=${user.id}&receiverId=${form.receiverId}&amount=${form.amount}`),
         { method: 'POST' }
       )
       if (!res.ok) {
@@ -42,7 +41,7 @@ export default function SendMoney() {
       setForm({ receiverId: '', amount: '' })
 
       // Refresh balance
-      fetch(`${API}/user/${user.id}`).then(r => r.json()).then(u => updateUser(u)).catch(() => {})
+      fetch(apiUrl(`/user/${user.id}`)).then(r => r.json()).then(u => updateUser(u)).catch(() => {})
 
       setToast({
         type: 'gold',

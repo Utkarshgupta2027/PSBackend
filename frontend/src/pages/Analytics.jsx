@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
+import { apiUrl } from '../api.js'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, LineChart, Line, Area, AreaChart
+  ResponsiveContainer, Area, AreaChart
 } from 'recharts'
 
-const API = 'http://localhost:8080'
 
 function fmtCurrency(n) {
   return '₹' + Number(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -50,7 +50,7 @@ export default function Analytics() {
   useEffect(() => {
     if (!user?.id) return
     setLoading(true)
-    fetch(`${API}/transaction/analytics/${user.id}?period=${period}`)
+    fetch(apiUrl(`/transaction/analytics/${user.id}?period=${period}`))
       .then(r => r.json())
       .then(d => {
         setData(Array.isArray(d.data) ? d.data : [])
@@ -62,7 +62,7 @@ export default function Analytics() {
 
   useEffect(() => {
     if (!user?.id) return
-    fetch(`${API}/transaction/history/${user.id}`)
+    fetch(apiUrl(`/transaction/history/${user.id}`))
       .then(r => r.json())
       .then(d => setTransactions(Array.isArray(d) ? d : []))
       .catch(() => {})
