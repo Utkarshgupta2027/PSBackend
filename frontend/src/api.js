@@ -1,13 +1,11 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+/**
+ * Central API configuration.
+ * In development: VITE_API_URL is empty → requests go to Vite proxy (localhost:8080)
+ * In production:  VITE_API_URL = your Railway backend URL
+ */
+export const API_BASE = 'https://psbackend-4-6amw.onrender.com' || ''
 
-console.log("BASE_URL:", BASE_URL); // 👈 add this
-
-export const registerUser = (data) => {
-  return fetch(`${BASE_URL}/user/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-};
+/** Build a full API URL. Usage: apiUrl('/user/login') */
+export function apiUrl(path) {
+  return `${API_BASE}${path}`
+}
