@@ -12,7 +12,6 @@ import payment_system_backend.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
