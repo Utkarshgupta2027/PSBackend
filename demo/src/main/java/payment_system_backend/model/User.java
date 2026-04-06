@@ -3,6 +3,7 @@ package payment_system_backend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "app_user")
 public class User {
 
     @Id
