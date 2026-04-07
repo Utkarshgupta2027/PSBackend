@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/qr")
-@CrossOrigin(origins = "http://localhost:3000")
 public class QrController {
 
     @Autowired

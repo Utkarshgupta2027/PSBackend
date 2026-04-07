@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transaction")
-@CrossOrigin(origins = "*")
 public class TransactionController {
 
     @Autowired
