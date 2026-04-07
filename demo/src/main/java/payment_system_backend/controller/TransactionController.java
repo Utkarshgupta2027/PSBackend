@@ -8,12 +8,9 @@ import payment_system_backend.repository.TransactionRepository;
 import payment_system_backend.service.RewardService;
 import payment_system_backend.service.TransactionService;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transaction")

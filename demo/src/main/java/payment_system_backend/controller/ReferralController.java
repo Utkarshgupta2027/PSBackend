@@ -9,6 +9,7 @@ import payment_system_backend.service.RewardService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/referral")
@@ -20,21 +21,39 @@ public class ReferralController {
     @Autowired
     private RewardService rewardService;
 
-    private static final int REFERRER_BONUS   = 100; // points for person who shared the code
-    private static final int REFEREE_BONUS    = 50;  // points for new user who used the code
+    private static final int REFERRER_BONUS   = 100;
+    private static final int REFEREE_BONUS    = 50;
+
+    /** Generate a unique referral code for a user if they don't have one */
+    private String ensureReferralCode(User user) {
+        if (user.getReferralCode() != null && !user.getReferralCode().isEmpty()) {
+            return user.getReferralCode();
+        }
+        // Generate unique 8-char code from UUID
+        String code;
+        do {
+            code = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        } while (userRepository.findByReferralCode(code) != null);
+        user.setReferralCode(code);
+        userRepository.save(user);
+        return code;
+    }
 
     /**
      * GET /referral/code/{userId}
-     * Returns the referral code and share link for the user.
+     * Returns the referral code. Auto-generates one if the user doesn't have one yet
+     * (for accounts created before the referral feature was added).
      */
     @GetMapping("/code/{userId}")
     public ResponseEntity<?> getReferralCode(@PathVariable Long userId) {
         return userRepository.findById(userId)
             .map(user -> {
+                String code = ensureReferralCode(user); // auto-generate if missing
                 Map<String, Object> res = new HashMap<>();
-                res.put("referralCode", user.getReferralCode());
+                res.put("referralCode", code);
                 res.put("name", user.getName());
                 res.put("userId", user.getId());
+                res.put("referredBy", user.getReferredBy());
                 return ResponseEntity.ok(res);
             })
             .orElse(ResponseEntity.notFound().build());

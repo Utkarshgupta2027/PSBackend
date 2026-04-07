@@ -35,8 +35,8 @@ export default function Referral() {
       .then(r => r.json())
       .then(d => {
         setReferralCode(d.referralCode || '')
-        // Check if user already used a referral code (from user object)
-        if (user.referredBy) setAlreadyClaimed(true)
+        // Backend response tells us if they already used a referral code
+        if (d.referredBy) setAlreadyClaimed(true)
       })
       .catch(() => {})
       .finally(() => setLoading(false))
