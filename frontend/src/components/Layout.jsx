@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: '/',          icon: '🏠', label: 'Dashboard',  end: true },
   { to: '/analytics', icon: '📊', label: 'Analytics' },
   { to: '/rewards',   icon: '⭐', label: 'Rewards' },
+  { to: '/referral',  icon: '🔗', label: 'Refer & Earn' },
   { to: '/send',      icon: '💸', label: 'Send Money' },
   { to: '/qr',        icon: '📷', label: 'QR Scanner' },
 ]

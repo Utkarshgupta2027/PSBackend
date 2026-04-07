@@ -12,6 +12,8 @@ export default defineConfig({
       '/qr': 'http://localhost:8080',
       '/rewards': 'http://localhost:8080',
       '/otp': 'http://localhost:8080',
+      '/referral': 'http://localhost:8080',
+      '/bank': 'http://localhost:8080',
     }
   },
   build: {

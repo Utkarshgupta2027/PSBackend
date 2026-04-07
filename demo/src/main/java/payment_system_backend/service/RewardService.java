@@ -29,6 +29,17 @@ public class RewardService {
         return points;
     }
 
+    /** Award referral bonus points. Source is REFERRAL_GIVEN or REFERRAL_CLAIMED. */
+    public int awardReferralPoints(Long userId, int points, String source) {
+        Reward reward = new Reward();
+        reward.setUserId(userId);
+        reward.setPoints(points);
+        reward.setSource(source);
+        reward.setDate(LocalDate.now());
+        rewardRepository.save(reward);
+        return points;
+    }
+
     /**
      * Claim daily login bonus. Returns points awarded (50) or 0 if already claimed today.
      */

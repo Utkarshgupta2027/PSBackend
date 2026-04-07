@@ -24,6 +24,12 @@ public class User {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    @Column(name = "referral_code", unique = true)
+    private String referralCode;
+
+    @Column(name = "referred_by")
+    private String referredBy; // referral code used during registration
+
     // GETTERS
 
     public Long getId() {
@@ -78,4 +84,10 @@ public class User {
 
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-}
+
+    public String getReferralCode() { return referralCode; }
+    public void setReferralCode(String referralCode) { this.referralCode = referralCode; }
+
+    public String getReferredBy() { return referredBy; }
+    public void setReferredBy(String referredBy) { this.referredBy = referredBy; }
+}

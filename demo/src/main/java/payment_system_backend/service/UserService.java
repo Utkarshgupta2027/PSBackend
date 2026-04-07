@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import payment_system_backend.model.User;
 import payment_system_backend.repository.UserRepository;
 
+import java.util.UUID;
+
 @Service
 public class UserService {
     @Autowired
@@ -17,6 +19,14 @@ public class UserService {
         }
 
         user.setBalance(0); // default wallet balance
+
+        // Auto-generate unique referral code (first 8 chars of UUID, uppercase)
+        String code;
+        do {
+            code = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+        } while (userRepository.findByReferralCode(code) != null);
+        user.setReferralCode(code);
+
         return userRepository.save(user);
     }
 }

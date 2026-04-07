@@ -6,6 +6,7 @@ import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Analytics from './pages/Analytics.jsx'
 import Rewards from './pages/Rewards.jsx'
+import Referral from './pages/Referral.jsx'
 import Settings from './pages/Settings.jsx'
 import SendMoney from './pages/SendMoney.jsx'
 import QRPage from './pages/QRPage.jsx'
@@ -33,6 +34,7 @@ export default function App() {
               <Route index element={<Dashboard />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="rewards" element={<Rewards />} />
+              <Route path="referral" element={<Referral />} />
               <Route path="settings" element={<Settings />} />
               <Route path="send" element={<SendMoney />} />
               <Route path="qr" element={<QRPage />} />
