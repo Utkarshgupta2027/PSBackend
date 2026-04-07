@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
-import { useOutletContext, useNavigate } from 'react-router-dom'
+import { useOutletContext, useNavigate, useSearchParams } from 'react-router-dom'
 import { apiUrl } from '../api.js'
 
 function fmtCurrency(n) {
@@ -11,11 +11,28 @@ export default function SendMoney() {
   const { user, updateUser } = useAuth()
   const { setToast } = useOutletContext()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [form, setForm] = useState({ receiverId: '', amount: '' })
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(null)
   const [error, setError] = useState('')
+  const [qrPrefilled, setQrPrefilled] = useState(false)
+  const [receiverInfo, setReceiverInfo] = useState(null)
+
+  // Pre-fill receiverId from QR scan URL param
+  useEffect(() => {
+    const rid = searchParams.get('receiverId')
+    if (rid) {
+      setForm(f => ({ ...f, receiverId: rid }))
+      setQrPrefilled(true)
+      // Lookup receiver info
+      fetch(apiUrl(`/user/${rid}`))
+        .then(r => r.ok ? r.json() : null)
+        .then(u => { if (u) setReceiverInfo(u) })
+        .catch(() => {})
+    }
+  }, [])
 
   const handleSend = async (e) => {
     e.preventDefault()
@@ -92,18 +109,46 @@ export default function SendMoney() {
 
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           <div>
-            <label className="label">Recipient User ID</label>
+            <label className="label">Recipient</label>
+
+            {/* QR pre-fill banner */}
+            {qrPrefilled && receiverInfo && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '0.875rem',
+                background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)',
+                borderRadius: '0.875rem', padding: '0.875rem 1rem', marginBottom: '0.75rem',
+                animation: 'slideUp 0.3s ease-out'
+              }}>
+                <div style={{
+                  width: '2.5rem', height: '2.5rem', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, var(--gradient-from), var(--gradient-to))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, color: 'white', fontSize: '1rem', flexShrink: 0
+                }}>{receiverInfo.name?.[0]?.toUpperCase()}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.9375rem', color: 'var(--text-primary)' }}>
+                    {receiverInfo.name}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    📷 Filled from QR scan · ID #{receiverInfo.id}
+                  </div>
+                </div>
+                <div style={{ color: '#34d399', fontSize: '1.25rem' }}>✓</div>
+              </div>
+            )}
+
+            {/* Receiver ID input */}
             <input
               id="send-receiver-id"
               className="input-field"
               type="number"
               placeholder="Enter recipient's User ID"
               value={form.receiverId}
-              onChange={e => setForm(f => ({ ...f, receiverId: e.target.value }))}
+              onChange={e => { setForm(f => ({ ...f, receiverId: e.target.value })); setQrPrefilled(false); setReceiverInfo(null) }}
               required
             />
             <div style={{ fontSize: '0.75rem', color: 'var(--text-faint)', marginTop: '0.375rem' }}>
-              💡 You can also scan a QR code to get their ID
+              💡 Or <button type="button" onClick={() => navigate('/qr')} style={{ background: 'none', border: 'none', color: 'var(--accent-light)', cursor: 'pointer', fontSize: '0.75rem', padding: 0, fontWeight: 600 }}>scan a QR code</button> to auto-fill
             </div>
           </div>
 

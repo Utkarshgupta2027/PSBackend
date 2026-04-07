@@ -29,10 +29,12 @@ export default function Rewards() {
       .then(r => r.json())
       .then(d => {
         setRewards(d)
-        // Check today's claim
-        const today = new Date().toDateString()
-        const lastClaim = localStorage.getItem('payflow_daily_bonus_date')
-        setAlreadyClaimed(lastClaim === today)
+        // Check if daily bonus already claimed today by looking at history
+        const todayStr = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
+        const claimedToday = d.history?.some(
+          r => r.source === 'DAILY_BONUS' && r.date === todayStr
+        )
+        setAlreadyClaimed(!!claimedToday)
       })
       .catch(() => {})
       .finally(() => setLoading(false))
@@ -45,13 +47,12 @@ export default function Rewards() {
     try {
       const res = await fetch(apiUrl(`/rewards/daily-bonus/${user.id}`), { method: 'POST' })
       const d = await res.json()
-      if (d.alreadyClaimed) {
+      if (d.alreadyClaimed || d.pointsAwarded === 0) {
+        setAlreadyClaimed(true)
         setToast({ type: 'info', icon: '⏳', message: 'Daily bonus already claimed today! Come back tomorrow.' })
-        setAlreadyClaimed(true)
       } else {
-        localStorage.setItem('payflow_daily_bonus_date', new Date().toDateString())
         setAlreadyClaimed(true)
-        setToast({ type: 'gold', icon: '🎁', message: `+${d.pointsAwarded} bonus points earned!`, duration: 4000 })
+        setToast({ type: 'gold', icon: '🎁', message: `+${d.pointsAwarded} bonus points earned! Total: ${d.totalPoints} pts`, duration: 4000 })
         fetchRewards()
       }
     } catch {

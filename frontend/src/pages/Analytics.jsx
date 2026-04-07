@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { apiUrl } from '../api.js'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Area, AreaChart, LinearGradient, Stop
+  ResponsiveContainer, Area, AreaChart
 } from 'recharts'
 
 function fmtCurrency(n) {
