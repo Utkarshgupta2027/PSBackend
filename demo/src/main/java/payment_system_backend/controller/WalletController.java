@@ -8,7 +8,6 @@ import payment_system_backend.service.WalletService;
 
 @RestController
 @RequestMapping("/wallet")
-@CrossOrigin(origins = "http://localhost:3000")
 public class WalletController {
     @GetMapping("/run")
     public String test(){
